@@ -13,10 +13,26 @@ class TodoListViewController: UITableViewController {
     // Instance Variable
     var lists: [TodoList] = []
     
+    // Add Item Action
+    @IBAction func addItem(_ sender: Any) {
+        let newRow = lists.count
+        let item = TodoList()
+        item.title = "Hello, I'm new row"
+        lists.append(item)
+        
+        let indexPath = IndexPath(row: newRow, section: 0)
+        tableView.insertRows(at: [indexPath], with: .automatic)
+    }
+    
+    
     //MARK: - VC LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Enable large title
+        navigationController?.navigationBar.prefersLargeTitles = true
+        
         
         var item1 = TodoList()
         item1.title = "Learn iOS Development"
@@ -59,14 +75,24 @@ extension TodoListViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "todoList",
-                                                 for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "todoList", for: indexPath) as! TodoListViewCell
 
         // Configure the cell...
-        cell.textLabel?.text = lists[indexPath.row].title
-        cell.accessoryType = (lists[indexPath.row].ischecked) ? .checkmark : .none
+        let list = lists[indexPath.row]
+        cell.configure(list)
         return cell
     }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+           
+           // Delete Row
+           if editingStyle == .delete {
+               lists.remove(at: indexPath.row)
+               tableView.deleteRows(at: [indexPath], with: .automatic)
+           }
+           
+           
+       }
     
 }
 
@@ -76,15 +102,17 @@ extension TodoListViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if let cell = tableView.cellForRow(at: indexPath) {
+        if let cell = tableView.cellForRow(at: indexPath) as? TodoListViewCell {
             if lists[indexPath.row].ischecked == true {
-                cell.accessoryType = .none
+                cell.button.setTitle("⏺", for: .normal)
             } else {
-                cell.accessoryType = .checkmark
+                cell.button.setTitle("☑️", for: .normal)
             }
             lists[indexPath.row].isToggle()
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
+     
+   
 }
