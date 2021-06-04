@@ -11,6 +11,10 @@ import UIKit
 class AddItemViewController: UITableViewController {
     
     
+    // Outlets
+    @IBOutlet weak var textField: UITextField!
+    
+    
     // MARK: - VC LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +36,7 @@ class AddItemViewController: UITableViewController {
     }
     
     @IBAction func done(_ sender: Any) {
+        print("content of text field is: \(textField.text!)")
         navigationController?.popViewController(animated: true)
     }
     
