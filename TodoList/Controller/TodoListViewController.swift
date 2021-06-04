@@ -33,6 +33,9 @@ class TodoListViewController: UITableViewController {
         // Enable large title
         navigationController?.navigationBar.prefersLargeTitles = true
         
+        // Hide Empty Rows
+        tableView.tableFooterView = UIView()
+        
         
         var item1 = TodoList()
         item1.title = "Learn iOS Development"
@@ -43,8 +46,17 @@ class TodoListViewController: UITableViewController {
         lists.append(item1)
         
         item1 = TodoList()
-        item1.title = "Learn Differnt Skills"
+        item1.title = "Learn Realm DataBase"
         lists.append(item1)
+        
+        item1 = TodoList()
+        item1.title = "learn third party library"
+        lists.append(item1)
+        
+        item1 = TodoList()
+        item1.title = "Learn Swift Language"
+        lists.append(item1)
+        
         
     }
     
@@ -52,10 +64,6 @@ class TodoListViewController: UITableViewController {
         super.didReceiveMemoryWarning()
     }
     
-    override var prefersStatusBarHidden: Bool {
-        return true
-    }
-
 }
 
 
@@ -90,10 +98,7 @@ extension TodoListViewController {
                lists.remove(at: indexPath.row)
                tableView.deleteRows(at: [indexPath], with: .automatic)
            }
-           
-           
        }
-    
 }
 
 // MARK: - Table View Delegate
@@ -103,16 +108,25 @@ extension TodoListViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if let cell = tableView.cellForRow(at: indexPath) as? TodoListViewCell {
-            if lists[indexPath.row].ischecked == true {
-                cell.button.setTitle("⏺", for: .normal)
-            } else {
-                cell.button.setTitle("☑️", for: .normal)
-            }
-            lists[indexPath.row].isToggle()
+            let item = lists[indexPath.row]
+            cell.checkIfCompleted(item)
+        }
+        checkSorted()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.tableView.reloadData()
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
-     
-   
+}
+
+
+// MARK: - Private Methods
+
+extension TodoListViewController {
+    
+    private func checkSorted() {
+          lists = lists.sorted(by: {(!$0.ischecked) && ($1.ischecked)})
+      }
+    
 }

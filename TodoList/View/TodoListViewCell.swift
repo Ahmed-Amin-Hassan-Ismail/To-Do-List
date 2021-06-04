@@ -12,20 +12,29 @@ class TodoListViewCell: UITableViewCell {
     
     // Outlets
     @IBOutlet weak var itemLabel: UILabel!
-    @IBOutlet weak var button: UIButton!
-    
-    // Action
-    @IBAction func strikeButton(_ sender: Any) {
-        
-    }
+    @IBOutlet weak var checkmarkLabel: UILabel!
     
     
     func configure(_ item: TodoList) {
         
         itemLabel.text = item.title
-        button.setTitle((item.ischecked) ? "☑️" : "⏺" , for: .normal)
+        checkmarkLabel.text = (item.ischecked) ? "☑️" : "⏺"
+        itemLabel.attributedText = NSAttributedString(string: item.title, attributes: (item.ischecked) ?  [NSAttributedString.Key.strikethroughStyle: true] : [NSAttributedString.Key.strikethroughStyle: false] )
     }
-
+    
+    func checkIfCompleted(_ item: TodoList) {
+        
+        if item.ischecked == true {
+            checkmarkLabel.text = "⏺"
+            itemLabel.attributedText = NSAttributedString(string: item.title, attributes: [NSAttributedString.Key.strikethroughStyle: false])
+        } else {
+            checkmarkLabel.text = "☑️"
+            itemLabel.attributedText = NSAttributedString(string: item.title, attributes: [NSAttributedString.Key.strikethroughStyle: true])
+            
+        }
+        item.isToggle()
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
