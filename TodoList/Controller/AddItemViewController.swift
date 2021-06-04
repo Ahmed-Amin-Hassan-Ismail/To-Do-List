@@ -29,6 +29,12 @@ class AddItemViewController: UITableViewController {
         
     }
     
+    // Active Keyboard Automatically
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        textField.becomeFirstResponder()
+    }
+    
     // MARK: - Actions
     
     @IBAction func cancel(_ sender: Any) {
