@@ -14,6 +14,7 @@
 		15758D122664FDDA00A8C865 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15758D112664FDDA00A8C865 /* Assets.xcassets */; };
 		15758D14266504D100A8C865 /* TodoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15758D13266504D100A8C865 /* TodoListViewController.swift */; };
 		15758D1626650F0F00A8C865 /* TodoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15758D1526650F0F00A8C865 /* TodoList.swift */; };
+		1582F5AF2666A90F003372D1 /* AddItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1582F5AE2666A90F003372D1 /* AddItemViewController.swift */; };
 		15CF593B26668CC300F892AD /* TodoListViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15CF593A26668CC300F892AD /* TodoListViewCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +28,7 @@
 		15758D112664FDDA00A8C865 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		15758D13266504D100A8C865 /* TodoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListViewController.swift; sourceTree = "<group>"; };
 		15758D1526650F0F00A8C865 /* TodoList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoList.swift; sourceTree = "<group>"; };
+		1582F5AE2666A90F003372D1 /* AddItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemViewController.swift; sourceTree = "<group>"; };
 		15CF593A26668CC300F892AD /* TodoListViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -85,6 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				15758D13266504D100A8C865 /* TodoListViewController.swift */,
+				1582F5AE2666A90F003372D1 /* AddItemViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -173,6 +176,7 @@
 				15758CFE2664FD4A00A8C865 /* AppDelegate.swift in Sources */,
 				15758D002664FD4A00A8C865 /* SceneDelegate.swift in Sources */,
 				15758D1626650F0F00A8C865 /* TodoList.swift in Sources */,
+				1582F5AF2666A90F003372D1 /* AddItemViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
