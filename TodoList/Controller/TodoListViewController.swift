@@ -64,6 +64,15 @@ class TodoListViewController: UITableViewController {
         super.didReceiveMemoryWarning()
     }
     
+    // MARK: - Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "addItem" {
+            let controller = segue.destination as! AddItemViewController
+            controller.delegate = self
+            
+        }
+    }
+    
 }
 
 
@@ -118,6 +127,28 @@ extension TodoListViewController {
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
+}
+
+// MARK: - AddItem Delegate
+
+extension TodoListViewController: AddItemViewControllerDelegate {
+    
+    
+    func AddItemViewControllerDidCancel(_ controller: AddItemViewController) {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    func AddItemViewController(_ controller: AddItemViewController, didFinishAdding item: TodoList) {
+        let newRow = lists.count
+        lists.append(item)
+        
+        let indexPath = IndexPath(row: newRow, section: 0)
+        tableView.insertRows(at: [indexPath], with: .automatic)
+        
+        navigationController?.popViewController(animated: true)
+    }
+    
+    
 }
 
 

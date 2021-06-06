@@ -8,7 +8,16 @@
 
 import UIKit
 
+protocol AddItemViewControllerDelegate: class {
+    
+    func AddItemViewControllerDidCancel(_ controller: AddItemViewController)
+    func AddItemViewController(_ controller: AddItemViewController, didFinishAdding item: TodoList)
+}
+
 class AddItemViewController: UITableViewController {
+    
+    // Delegate Variable
+    weak var delegate: AddItemViewControllerDelegate?
     
     
     // Outlets
@@ -45,16 +54,15 @@ class AddItemViewController: UITableViewController {
     // MARK: - Actions
     
     @IBAction func cancel(_ sender: Any) {
-        navigationController?.popViewController(animated: true)
+        delegate?.AddItemViewControllerDidCancel(self)
     }
     
     @IBAction func done(_ sender: Any) {
         print("content of text field is: \(textField.text!)")
-        navigationController?.popViewController(animated: true)
+        let item = TodoList()
+        item.title = textField.text!
+        delegate?.AddItemViewController(self, didFinishAdding: item)
     }
-    
-    
-    
 }
 
 
