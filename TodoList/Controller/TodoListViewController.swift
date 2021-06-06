@@ -15,13 +15,7 @@ class TodoListViewController: UITableViewController {
     
     // Add Item Action
     @IBAction func addItem(_ sender: Any) {
-        let newRow = lists.count
-        let item = TodoList()
-        item.title = "Hello, I'm new row"
-        lists.append(item)
         
-        let indexPath = IndexPath(row: newRow, section: 0)
-        tableView.insertRows(at: [indexPath], with: .automatic)
     }
     
     
@@ -64,12 +58,27 @@ class TodoListViewController: UITableViewController {
         super.didReceiveMemoryWarning()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        // Sorted Items with names
+        sortedByName()
+        
+        // sorted items with task completed
+        checkSorted()
+    }
+    
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "addItem" {
-            let controller = segue.destination as! AddItemViewController
+            let controller = segue.destination as! ItemDetailViewController
             controller.delegate = self
-            
+        } else if segue.identifier == "editItem" {
+            let controller = segue.destination as! ItemDetailViewController
+            controller.delegate = self
+            if let indexPath = tableView.indexPath(for: sender as! UITableViewCell) {
+                controller.itemToEdit = lists[indexPath.row]
+            }
         }
     }
     
@@ -131,22 +140,35 @@ extension TodoListViewController {
 
 // MARK: - AddItem Delegate
 
-extension TodoListViewController: AddItemViewControllerDelegate {
+extension TodoListViewController: ItemDetailViewControllerDelegate {
     
     
-    func AddItemViewControllerDidCancel(_ controller: AddItemViewController) {
+    func AddItemViewControllerDidCancel(_ controller: ItemDetailViewController) {
         navigationController?.popViewController(animated: true)
     }
     
-    func AddItemViewController(_ controller: AddItemViewController, didFinishAdding item: TodoList) {
+    func AddItemViewController(_ controller: ItemDetailViewController, didFinishAdding item: TodoList) {
         let newRow = lists.count
         lists.append(item)
         
         let indexPath = IndexPath(row: newRow, section: 0)
         tableView.insertRows(at: [indexPath], with: .automatic)
+        tableView.reloadData()
         
         navigationController?.popViewController(animated: true)
     }
+    
+    func AddItemViewController(_ controller: ItemDetailViewController, didFinishEditing item: TodoList) {
+        if let index = lists.firstIndex(of: item) {
+            let indexPath = IndexPath(row: index, section: 0)
+            if let cell = tableView.cellForRow(at: indexPath) as? TodoListViewCell {
+                cell.configure(item)
+            }
+        }
+        tableView.reloadData()
+        navigationController?.popViewController(animated: true)
+    }
+    
     
     
 }
@@ -159,5 +181,9 @@ extension TodoListViewController {
     private func checkSorted() {
           lists = lists.sorted(by: {(!$0.ischecked) && ($1.ischecked)})
       }
+    
+    private func sortedByName() {
+        lists = lists.sorted(by: {($0.title) < ($1.title)})
+    }
     
 }

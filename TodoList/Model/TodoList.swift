@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class TodoList {
+class TodoList: NSObject {
     
     var title: String = ""
     var ischecked: Bool = false

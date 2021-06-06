@@ -15,11 +15,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="todoList" id="f20-Yp-OXd" customClass="TodoListViewCell" customModule="TodoList" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="detailDisclosureButton" indentationWidth="10" reuseIdentifier="todoList" id="f20-Yp-OXd" customClass="TodoListViewCell" customModule="TodoList" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="414" height="53"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="f20-Yp-OXd" id="0V3-ok-RLS">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="53"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="351" height="53"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HLg-MB-eu5">
@@ -47,6 +47,7 @@
                                 <connections>
                                     <outlet property="checkmarkLabel" destination="0m2-ea-3KH" id="vWr-fx-Bg8"/>
                                     <outlet property="itemLabel" destination="HLg-MB-eu5" id="KFh-f2-yu5"/>
+                                    <segue destination="PfI-kz-MTe" kind="show" identifier="editItem" trigger="accessoryAction" id="BND-HT-sA9"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -152,4 +153,7 @@
             <point key="canvasLocation" x="768.11594202898561" y="-27.455357142857142"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="BND-HT-sA9"/>
+    </inferredMetricsTieBreakers>
 </document>

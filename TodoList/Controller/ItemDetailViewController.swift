@@ -8,16 +8,20 @@
 
 import UIKit
 
-protocol AddItemViewControllerDelegate: class {
+protocol ItemDetailViewControllerDelegate: class {
     
-    func AddItemViewControllerDidCancel(_ controller: AddItemViewController)
-    func AddItemViewController(_ controller: AddItemViewController, didFinishAdding item: TodoList)
+    func AddItemViewControllerDidCancel(_ controller: ItemDetailViewController)
+    func AddItemViewController(_ controller: ItemDetailViewController, didFinishAdding item: TodoList)
+    func AddItemViewController(_ controller: ItemDetailViewController, didFinishEditing item: TodoList)
 }
 
-class AddItemViewController: UITableViewController {
+class ItemDetailViewController: UITableViewController {
+    
+    // Edit Item Variable
+    var itemToEdit: TodoList?
     
     // Delegate Variable
-    weak var delegate: AddItemViewControllerDelegate?
+    weak var delegate: ItemDetailViewControllerDelegate?
     
     
     // Outlets
@@ -41,6 +45,13 @@ class AddItemViewController: UITableViewController {
         // Disable Done Button
         doneBarButton.isEnabled = false
         
+        // Editing item
+        if let item = itemToEdit {
+            textField.text = item.title
+            title = "Edit Item"
+            doneBarButton.isEnabled = true
+        }
+        
         
         
     }
@@ -58,10 +69,14 @@ class AddItemViewController: UITableViewController {
     }
     
     @IBAction func done(_ sender: Any) {
-        print("content of text field is: \(textField.text!)")
-        let item = TodoList()
-        item.title = textField.text!
-        delegate?.AddItemViewController(self, didFinishAdding: item)
+        if let itemToEdit = itemToEdit {
+            itemToEdit.title = textField.text!
+            delegate?.AddItemViewController(self, didFinishEditing: itemToEdit)
+        } else {
+            let item = TodoList()
+            item.title = textField.text!
+            delegate?.AddItemViewController(self, didFinishAdding: item)
+        }
     }
 }
 
@@ -69,7 +84,7 @@ class AddItemViewController: UITableViewController {
 
 // MARK: - TableView Delegate
 
-extension AddItemViewController {
+extension ItemDetailViewController {
     
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         return nil
@@ -86,7 +101,7 @@ extension AddItemViewController {
 
 // MARK: - TextField Delegate
 
-extension AddItemViewController: UITextFieldDelegate {
+extension ItemDetailViewController: UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
