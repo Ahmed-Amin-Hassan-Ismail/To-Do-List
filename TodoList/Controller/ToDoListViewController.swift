@@ -8,10 +8,10 @@
 
 import UIKit
 
-class TodoListViewController: UITableViewController {
+class ToDoListViewController: UITableViewController {
     
     // Instance Variable
-    var lists: [TodoList] = []
+    var lists: [ToDoList] = []
     
     // Add Item Action
     @IBAction func addItem(_ sender: Any) {
@@ -30,26 +30,12 @@ class TodoListViewController: UITableViewController {
         // Hide Empty Rows
         tableView.tableFooterView = UIView()
         
+        // Load data
+        loadToDoList()
         
-        var item1 = TodoList()
-        item1.title = "Learn iOS Development"
-        lists.append(item1)
-        
-        item1 = TodoList()
-        item1.title = "Learn Different Design Pattern"
-        lists.append(item1)
-        
-        item1 = TodoList()
-        item1.title = "Learn Realm DataBase"
-        lists.append(item1)
-        
-        item1 = TodoList()
-        item1.title = "learn third party library"
-        lists.append(item1)
-        
-        item1 = TodoList()
-        item1.title = "Learn Swift Language"
-        lists.append(item1)
+        // Return Document Directory
+        print("Document folder is: -  \(documentDirectory())")
+        print("Data File Path is: - \(dataFilePath())")
         
         
     }
@@ -87,22 +73,22 @@ class TodoListViewController: UITableViewController {
 
 // MARK: - Table view data source
 
-extension TodoListViewController {
+extension ToDoListViewController {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return lists.count
     }
-
+    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "todoList", for: indexPath) as! TodoListViewCell
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: "todoList", for: indexPath) as! ToDoListViewCell
+        
         // Configure the cell...
         let list = lists[indexPath.row]
         cell.configure(list)
@@ -110,22 +96,25 @@ extension TodoListViewController {
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-           
-           // Delete Row
-           if editingStyle == .delete {
-               lists.remove(at: indexPath.row)
-               tableView.deleteRows(at: [indexPath], with: .automatic)
-           }
-       }
+        
+        // Delete Row
+        if editingStyle == .delete {
+            lists.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            
+            // Saving Data
+            saveToDoList()
+        }
+    }
 }
 
 // MARK: - Table View Delegate
 
-extension TodoListViewController {
+extension ToDoListViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if let cell = tableView.cellForRow(at: indexPath) as? TodoListViewCell {
+        if let cell = tableView.cellForRow(at: indexPath) as? ToDoListViewCell {
             let item = lists[indexPath.row]
             cell.checkIfCompleted(item)
         }
@@ -134,20 +123,23 @@ extension TodoListViewController {
             self.tableView.reloadData()
         }
         
+        // Saving Data
+        saveToDoList()
+        
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
 // MARK: - AddItem Delegate
 
-extension TodoListViewController: ItemDetailViewControllerDelegate {
+extension ToDoListViewController: ItemDetailViewControllerDelegate {
     
     
-    func AddItemViewControllerDidCancel(_ controller: ItemDetailViewController) {
+    func ItemDetailViewControllerDidCancel(_ controller: ItemDetailViewController) {
         navigationController?.popViewController(animated: true)
     }
     
-    func AddItemViewController(_ controller: ItemDetailViewController, didFinishAdding item: TodoList) {
+    func ItemDetailViewController(_ controller: ItemDetailViewController, didFinishAdding item: ToDoList) {
         let newRow = lists.count
         lists.append(item)
         
@@ -155,14 +147,20 @@ extension TodoListViewController: ItemDetailViewControllerDelegate {
         tableView.insertRows(at: [indexPath], with: .automatic)
         tableView.reloadData()
         
+        // Saving Data
+        saveToDoList()
+        
         navigationController?.popViewController(animated: true)
     }
     
-    func AddItemViewController(_ controller: ItemDetailViewController, didFinishEditing item: TodoList) {
+    func ItemDetailViewController(_ controller: ItemDetailViewController, didFinishEditing item: ToDoList) {
         if let index = lists.firstIndex(of: item) {
             let indexPath = IndexPath(row: index, section: 0)
-            if let cell = tableView.cellForRow(at: indexPath) as? TodoListViewCell {
+            if let cell = tableView.cellForRow(at: indexPath) as? ToDoListViewCell {
                 cell.configure(item)
+                
+                // Saving Data
+                saveToDoList()
             }
         }
         tableView.reloadData()
@@ -176,14 +174,52 @@ extension TodoListViewController: ItemDetailViewControllerDelegate {
 
 // MARK: - Private Methods
 
-extension TodoListViewController {
+extension ToDoListViewController {
     
     private func checkSorted() {
-          lists = lists.sorted(by: {(!$0.ischecked) && ($1.ischecked)})
-      }
+        lists = lists.sorted(by: {(!$0.ischecked) && ($1.ischecked)})
+    }
     
     private func sortedByName() {
         lists = lists.sorted(by: {($0.title) < ($1.title)})
+    }
+    
+    // Document Folder Path
+    private func documentDirectory() -> URL {
+        
+        let paths = FileManager.default.urls(for: .documentDirectory,
+                                             in: .userDomainMask)
+        return paths[0]
+    }
+    
+    private func dataFilePath() -> URL {
+        return documentDirectory().appendingPathComponent("ToDoList.plist")
+    }
+    
+    // Save data to file
+    private func saveToDoList() {
+        let encoder = PropertyListEncoder()
+        do {
+            let data = try encoder.encode(lists)
+            try data.write(to: dataFilePath(),
+                           options: .atomic)
+        } catch {
+            print("Error while encoding lists \(error.localizedDescription)")
+        }
+        
+    }
+    
+    // Load data from file
+    private func loadToDoList() {
+        let path = dataFilePath()
+        if let data = try? Data(contentsOf: path) {
+            let decoder = PropertyListDecoder()
+            do {
+                lists = try decoder.decode([ToDoList].self, from: data)
+            } catch {
+                print("Error while decoding lists \(error.localizedDescription)")
+            }
+        }
     }
     
 }

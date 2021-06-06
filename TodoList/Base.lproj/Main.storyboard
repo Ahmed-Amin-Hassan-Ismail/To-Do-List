@@ -9,17 +9,17 @@
         <!--To-Do List -->
         <scene sceneID="jSd-5o-ag6">
             <objects>
-                <tableViewController id="h1J-Ak-Hsu" customClass="TodoListViewController" customModule="TodoList" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="h1J-Ak-Hsu" customClass="ToDoListViewController" customModule="TodoList" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="5IW-al-hVe">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="detailDisclosureButton" indentationWidth="10" reuseIdentifier="todoList" id="f20-Yp-OXd" customClass="TodoListViewCell" customModule="TodoList" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="414" height="53"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="detailDisclosureButton" indentationWidth="10" reuseIdentifier="todoList" id="f20-Yp-OXd" customClass="ToDoListViewCell" customModule="TodoList" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="414" height="53.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="f20-Yp-OXd" id="0V3-ok-RLS">
-                                    <rect key="frame" x="0.0" y="0.0" width="351" height="53"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="351" height="53.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HLg-MB-eu5">
@@ -29,7 +29,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⏺" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0m2-ea-3KH">
-                                            <rect key="frame" x="20" y="16" width="23" height="21"/>
+                                            <rect key="frame" x="20" y="16" width="23" height="21.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -60,7 +60,7 @@
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="D3m-nk-CD8">
                             <connections>
                                 <action selector="addItem:" destination="h1J-Ak-Hsu" id="Px6-xF-aUv"/>
-                                <segue destination="PfI-kz-MTe" kind="show" id="dLH-MT-P1b"/>
+                                <segue destination="PfI-kz-MTe" kind="show" identifier="addItem" id="dLH-MT-P1b"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -69,10 +69,10 @@
             </objects>
             <point key="canvasLocation" x="1678.2608695652175" y="-27.455357142857142"/>
         </scene>
-        <!--Add Item-->
+        <!--Item Detail-->
         <scene sceneID="cUG-WM-bzC">
             <objects>
-                <tableViewController id="PfI-kz-MTe" customClass="AddItemViewController" customModule="TodoList" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="PfI-kz-MTe" userLabel="Item Detail" customClass="ItemDetailViewController" customModule="TodoList" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="WaU-dg-RtC" userLabel="Add Item" colorLabel="IBBuiltInLabel-Orange">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -92,7 +92,7 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                                     <connections>
-                                                        <action selector="done:" destination="PfI-kz-MTe" eventType="editingDidEndOnExit" id="HG3-P5-2ks"/>
+                                                        <action selector="done:" destination="PfI-kz-MTe" eventType="editingDidEndOnExit" id="s9t-vy-aJz"/>
                                                     </connections>
                                                 </textField>
                                             </subviews>
@@ -115,18 +115,18 @@
                     <navigationItem key="navigationItem" title="Add Item" id="F4D-XJ-PT5">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="uLi-Yi-XYS">
                             <connections>
-                                <action selector="cancel:" destination="PfI-kz-MTe" id="QsM-Xd-jiK"/>
+                                <action selector="cancel:" destination="PfI-kz-MTe" id="tgj-JP-8jG"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="I58-6e-of8">
                             <connections>
-                                <action selector="done:" destination="PfI-kz-MTe" id="ilF-dM-ouy"/>
+                                <action selector="done:" destination="PfI-kz-MTe" id="Axp-o6-Xen"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="doneBarButton" destination="I58-6e-of8" id="Goj-3k-sL8"/>
-                        <outlet property="textField" destination="AJp-LO-tOM" id="dUF-O4-ZaG"/>
+                        <outlet property="doneBarButton" destination="I58-6e-of8" id="Iis-ZP-Bc3"/>
+                        <outlet property="textField" destination="AJp-LO-tOM" id="A5v-Jm-IzY"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wKH-VE-4iF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
