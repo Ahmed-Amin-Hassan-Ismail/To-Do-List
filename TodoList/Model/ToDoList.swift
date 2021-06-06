@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class TodoList: NSObject {
+class ToDoList: NSObject, Codable {
     
     var title: String = ""
     var ischecked: Bool = false
