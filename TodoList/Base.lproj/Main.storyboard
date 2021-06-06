@@ -56,7 +56,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="To-Do List " id="xTu-1f-OrZ">
-                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="add" id="D3m-nk-CD8">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="D3m-nk-CD8">
                             <connections>
                                 <action selector="addItem:" destination="h1J-Ak-Hsu" id="Px6-xF-aUv"/>
                                 <segue destination="PfI-kz-MTe" kind="show" id="dLH-MT-P1b"/>
