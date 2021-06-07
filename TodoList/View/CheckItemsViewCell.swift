@@ -8,21 +8,21 @@
 
 import UIKit
 
-class ToDoListViewCell: UITableViewCell {
+class CheckItemsViewCell: UITableViewCell {
     
     // Outlets
     @IBOutlet weak var itemLabel: UILabel!
     @IBOutlet weak var checkmarkLabel: UILabel!
     
     
-    func configure(_ item: ToDoList) {
+    func configure(_ item: ToDoItems) {
         
         itemLabel.text = item.title
         checkmarkLabel.text = (item.ischecked) ? "☑️" : "⏺"
         itemLabel.attributedText = NSAttributedString(string: item.title, attributes: (item.ischecked) ?  [NSAttributedString.Key.strikethroughStyle: true] : [NSAttributedString.Key.strikethroughStyle: false] )
     }
     
-    func checkIfCompleted(_ item: ToDoList) {
+    func checkIfCompleted(_ item: ToDoItems) {
         
         if item.ischecked == true {
             checkmarkLabel.text = "⏺"

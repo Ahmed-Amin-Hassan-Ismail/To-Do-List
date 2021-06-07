@@ -11,14 +11,14 @@ import UIKit
 protocol ItemDetailViewControllerDelegate: class {
     
     func ItemDetailViewControllerDidCancel(_ controller: ItemDetailViewController)
-    func ItemDetailViewController(_ controller: ItemDetailViewController, didFinishAdding item: ToDoList)
-    func ItemDetailViewController(_ controller: ItemDetailViewController, didFinishEditing item: ToDoList)
+    func ItemDetailViewController(_ controller: ItemDetailViewController, didFinishAdding item: ToDoItems)
+    func ItemDetailViewController(_ controller: ItemDetailViewController, didFinishEditing item: ToDoItems)
 }
 
 class ItemDetailViewController: UITableViewController {
     
     // Edit Item Variable
-    var itemToEdit: ToDoList?
+    var itemToEdit: ToDoItems?
     
     // Delegate Variable
     weak var delegate: ItemDetailViewControllerDelegate?
@@ -73,7 +73,7 @@ class ItemDetailViewController: UITableViewController {
             itemToEdit.title = textField.text!
             delegate?.ItemDetailViewController(self, didFinishEditing: itemToEdit)
         } else {
-            let item = ToDoList()
+            let item = ToDoItems()
             item.title = textField.text!
             delegate?.ItemDetailViewController(self, didFinishAdding: item)
         }

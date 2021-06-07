@@ -1,8 +1,8 @@
 //
-//  TodoListViewController.swift
+//  ToDoListViewController.swift
 //  TodoList
 //
-//  Created by Amin  on 5/31/21.
+//  Created by Amin  on 6/7/21.
 //  Copyright © 2021 AhmedAmin. All rights reserved.
 //
 
@@ -10,66 +10,71 @@ import UIKit
 
 class ToDoListViewController: UITableViewController {
     
-    // Instance Variable
+    let cellIdentifier = "ToDoList"
     var lists: [ToDoList] = []
     
-    // Add Item Action
-    @IBAction func addItem(_ sender: Any) {
-        
-    }
     
-    
-    //MARK: - VC LifeCycle
-    
+    // MARK: - controller life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Register tableView Cell
+        tableView.register(UITableViewCell.self,
+                           forCellReuseIdentifier: cellIdentifier)
         
         // Enable large title
         navigationController?.navigationBar.prefersLargeTitles = true
         
-        // Hide Empty Rows
+        // Adjust navigation bar title
+        navigationController?.navigationBar.largeTitleTextAttributes = [
+            NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 40),
+            NSAttributedString.Key.foregroundColor: UIColor.systemBlue
+        ]
+        
+        
+        
+        // Hide empty cells
         tableView.tableFooterView = UIView()
         
-        // Load data
-        loadToDoList()
+        // Add some lists
+        var list1 = ToDoList(name: "Birthday")
+        lists.append(list1)
         
-        // Return Document Directory
-        print("Document folder is: -  \(documentDirectory())")
-        print("Data File Path is: - \(dataFilePath())")
+        list1 = ToDoList(name: "Groceries")
+        lists.append(list1)
         
+        list1 = ToDoList(name: "Cool App")
+        lists.append(list1)
         
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        
-        // Sorted Items with names
+        // Sorted by name
         sortedByName()
         
-        // sorted items with task completed
-        checkSorted()
+    }
+    
+    override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        let listDetailViewController = storyboard?.instantiateViewController(identifier: "ListDetailViewController") as! ListDetailViewController
+        listDetailViewController.delegate = self
+        let listToEdit = lists[indexPath.row]
+        listDetailViewController.listToEdit = listToEdit
+        
+        navigationController?.pushViewController(listDetailViewController, animated: true)
     }
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "addItem" {
-            let controller = segue.destination as! ItemDetailViewController
+        if segue.identifier == "showCheckItem" {
+            let controller = segue.destination as! CheckItemsViewController
+            controller.list = sender as? ToDoList
+        } else if segue.identifier == "addList" {
+            let controller = segue.destination as! ListDetailViewController
             controller.delegate = self
-        } else if segue.identifier == "editItem" {
-            let controller = segue.destination as! ItemDetailViewController
-            controller.delegate = self
-            if let indexPath = tableView.indexPath(for: sender as! UITableViewCell) {
-                controller.itemToEdit = lists[indexPath.row]
-            }
         }
     }
     
+    
+    
+    
 }
-
 
 // MARK: - Table view data source
 
@@ -85,141 +90,67 @@ extension ToDoListViewController {
         return lists.count
     }
     
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "todoList", for: indexPath) as! ToDoListViewCell
         
-        // Configure the cell...
-        let list = lists[indexPath.row]
-        cell.configure(list)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier)!
+        
+        // configure cell...
+        cell.textLabel?.text = lists[indexPath.row].name
+        cell.accessoryType = .detailDisclosureButton
+        
         return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
-        // Delete Row
-        if editingStyle == .delete {
-            lists.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-            
-            // Saving Data
-            saveToDoList()
-        }
     }
 }
 
-// MARK: - Table View Delegate
+// MARK: - Table view delegate
 
 extension ToDoListViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        if let cell = tableView.cellForRow(at: indexPath) as? ToDoListViewCell {
-            let item = lists[indexPath.row]
-            cell.checkIfCompleted(item)
-        }
-        checkSorted()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.tableView.reloadData()
-        }
-        
-        // Saving Data
-        saveToDoList()
-        
-        tableView.deselectRow(at: indexPath, animated: true)
+        let list = lists[indexPath.row]
+        performSegue(withIdentifier: "showCheckItem", sender: list)
     }
 }
 
-// MARK: - AddItem Delegate
+// MARK: - ListDetailVc delegate
 
-extension ToDoListViewController: ItemDetailViewControllerDelegate {
+extension ToDoListViewController: ListDetailViewControllerDelegate {
     
-    
-    func ItemDetailViewControllerDidCancel(_ controller: ItemDetailViewController) {
+    func ListDetailViewControllerDidCancel(_ controller: ListDetailViewController) {
         navigationController?.popViewController(animated: true)
     }
     
-    func ItemDetailViewController(_ controller: ItemDetailViewController, didFinishAdding item: ToDoList) {
+    func ListDetailViewController(_ controller: ListDetailViewController, didFinishAdding list: ToDoList) {
         let newRow = lists.count
-        lists.append(item)
-        
+        lists.append(list)
         let indexPath = IndexPath(row: newRow, section: 0)
         tableView.insertRows(at: [indexPath], with: .automatic)
-        tableView.reloadData()
         
-        // Saving Data
-        saveToDoList()
+        // Sorted by name
+        sortedByName()
+        tableView.reloadData()
         
         navigationController?.popViewController(animated: true)
     }
     
-    func ItemDetailViewController(_ controller: ItemDetailViewController, didFinishEditing item: ToDoList) {
-        if let index = lists.firstIndex(of: item) {
-            let indexPath = IndexPath(row: index, section: 0)
-            if let cell = tableView.cellForRow(at: indexPath) as? ToDoListViewCell {
-                cell.configure(item)
-                
-                // Saving Data
-                saveToDoList()
-            }
+    func ListDetailViewController(_ controller: ListDetailViewController, didFinishEditing list: ToDoList) {
+        let index = lists.firstIndex(of: list)!
+        let indexPath = IndexPath(row: index, section: 0)
+        if let cell = tableView.cellForRow(at: indexPath) {
+            cell.textLabel?.text = list.name
         }
+        // Sorted by name
+        sortedByName()
         tableView.reloadData()
         navigationController?.popViewController(animated: true)
     }
-    
-    
-    
 }
 
-
 // MARK: - Private Methods
-
 extension ToDoListViewController {
     
-    private func checkSorted() {
-        lists = lists.sorted(by: {(!$0.ischecked) && ($1.ischecked)})
-    }
-    
     private func sortedByName() {
-        lists = lists.sorted(by: {($0.title) < ($1.title)})
+     lists = lists.sorted(by: {($0.name) < ($1.name)})
     }
-    
-    // Document Folder Path
-    private func documentDirectory() -> URL {
-        
-        let paths = FileManager.default.urls(for: .documentDirectory,
-                                             in: .userDomainMask)
-        return paths[0]
-    }
-    
-    private func dataFilePath() -> URL {
-        return documentDirectory().appendingPathComponent("ToDoList.plist")
-    }
-    
-    // Save data to file
-    private func saveToDoList() {
-        let encoder = PropertyListEncoder()
-        do {
-            let data = try encoder.encode(lists)
-            try data.write(to: dataFilePath(),
-                           options: .atomic)
-        } catch {
-            print("Error while encoding lists \(error.localizedDescription)")
-        }
-        
-    }
-    
-    // Load data from file
-    private func loadToDoList() {
-        let path = dataFilePath()
-        if let data = try? Data(contentsOf: path) {
-            let decoder = PropertyListDecoder()
-            do {
-                lists = try decoder.decode([ToDoList].self, from: data)
-            } catch {
-                print("Error while decoding lists \(error.localizedDescription)")
-            }
-        }
-    }
-    
 }

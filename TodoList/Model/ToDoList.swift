@@ -1,21 +1,20 @@
 //
-//  TodoList.swift
+//  ToDoList.swift
 //  TodoList
 //
-//  Created by Amin  on 5/31/21.
+//  Created by Amin  on 6/7/21.
 //  Copyright © 2021 AhmedAmin. All rights reserved.
 //
 
 import Foundation
-import UIKit
 
-class ToDoList: NSObject, Codable {
+
+class ToDoList: NSObject {
     
-    var title: String = ""
-    var ischecked: Bool = false
+    var name: String = ""
     
-    func isToggle() {
-        ischecked = !ischecked
+    init(name: String) {
+        self.name = name
+        super.init()
     }
-    
 }
