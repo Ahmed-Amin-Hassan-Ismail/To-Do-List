@@ -11,7 +11,7 @@ import UIKit
 class ToDoListViewController: UITableViewController {
     
     let cellIdentifier = "ToDoList"
-    var lists: [ToDoList] = []
+    var dataModel: DataModel!
     
     
     // MARK: - controller life cycle
@@ -31,20 +31,8 @@ class ToDoListViewController: UITableViewController {
             NSAttributedString.Key.foregroundColor: UIColor.systemBlue
         ]
         
-        
-        
         // Hide empty cells
         tableView.tableFooterView = UIView()
-        
-        // Add some lists
-        var list1 = ToDoList(name: "Birthday")
-        lists.append(list1)
-        
-        list1 = ToDoList(name: "Groceries")
-        lists.append(list1)
-        
-        list1 = ToDoList(name: "Cool App")
-        lists.append(list1)
         
         // Sorted by name
         sortedByName()
@@ -54,7 +42,7 @@ class ToDoListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         let listDetailViewController = storyboard?.instantiateViewController(identifier: "ListDetailViewController") as! ListDetailViewController
         listDetailViewController.delegate = self
-        let listToEdit = lists[indexPath.row]
+        let listToEdit = dataModel.lists[indexPath.row]
         listDetailViewController.listToEdit = listToEdit
         
         navigationController?.pushViewController(listDetailViewController, animated: true)
@@ -87,7 +75,7 @@ extension ToDoListViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return lists.count
+        return dataModel.lists.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -95,11 +83,20 @@ extension ToDoListViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier)!
         
         // configure cell...
-        cell.textLabel?.text = lists[indexPath.row].name
+        cell.textLabel?.text = dataModel.lists[indexPath.row].name
         cell.accessoryType = .detailDisclosureButton
         
         return cell
         
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
+        // Delete a list
+        if editingStyle == .delete {
+            dataModel.lists.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
     }
 }
 
@@ -108,7 +105,7 @@ extension ToDoListViewController {
 extension ToDoListViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let list = lists[indexPath.row]
+        let list = dataModel.lists[indexPath.row]
         performSegue(withIdentifier: "showCheckItem", sender: list)
     }
 }
@@ -122,8 +119,8 @@ extension ToDoListViewController: ListDetailViewControllerDelegate {
     }
     
     func ListDetailViewController(_ controller: ListDetailViewController, didFinishAdding list: ToDoList) {
-        let newRow = lists.count
-        lists.append(list)
+        let newRow = dataModel.lists.count
+        dataModel.lists.append(list)
         let indexPath = IndexPath(row: newRow, section: 0)
         tableView.insertRows(at: [indexPath], with: .automatic)
         
@@ -135,7 +132,7 @@ extension ToDoListViewController: ListDetailViewControllerDelegate {
     }
     
     func ListDetailViewController(_ controller: ListDetailViewController, didFinishEditing list: ToDoList) {
-        let index = lists.firstIndex(of: list)!
+        let index = dataModel.lists.firstIndex(of: list)!
         let indexPath = IndexPath(row: index, section: 0)
         if let cell = tableView.cellForRow(at: indexPath) {
             cell.textLabel?.text = list.name
@@ -147,10 +144,10 @@ extension ToDoListViewController: ListDetailViewControllerDelegate {
     }
 }
 
-// MARK: - Private Methods
+// MARK: - Helper Methods
 extension ToDoListViewController {
     
     private func sortedByName() {
-     lists = lists.sorted(by: {($0.name) < ($1.name)})
+        dataModel.lists = dataModel.lists.sorted(by: {($0.name) < ($1.name)})
     }
 }
