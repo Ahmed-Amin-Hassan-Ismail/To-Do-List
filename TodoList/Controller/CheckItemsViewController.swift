@@ -11,14 +11,7 @@ import UIKit
 class CheckItemsViewController: UITableViewController {
     
     // Instance Variable
-    var items: [ToDoItems] = []
     var list: ToDoList!
-    
-    // Add Item Action
-    @IBAction func addItem(_ sender: Any) {
-        
-    }
-    
     
     //MARK: - VC LifeCycle
     
@@ -33,14 +26,6 @@ class CheckItemsViewController: UITableViewController {
         
         // Change navigation bar title 
         title = list.name
-        
-        // Load data
-        loadCheckItems()
-        
-        // Return Document Directory
-        print("Document folder is: -  \(documentDirectory())")
-        print("Data File Path is: - \(dataFilePath())")
-        
         
     }
     
@@ -67,7 +52,7 @@ class CheckItemsViewController: UITableViewController {
             let controller = segue.destination as! ItemDetailViewController
             controller.delegate = self
             if let indexPath = tableView.indexPath(for: sender as! UITableViewCell) {
-                controller.itemToEdit = items[indexPath.row]
+                controller.itemToEdit = list.items[indexPath.row]
             }
         }
     }
@@ -86,7 +71,7 @@ extension CheckItemsViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return items.count
+        return list.items.count
     }
     
     
@@ -94,8 +79,8 @@ extension CheckItemsViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "todoList", for: indexPath) as! CheckItemsViewCell
         
         // Configure the cell...
-        let list = items[indexPath.row]
-        cell.configure(list)
+        let item = list.items[indexPath.row]
+        cell.configure(item)
         return cell
     }
     
@@ -103,11 +88,9 @@ extension CheckItemsViewController {
         
         // Delete Row
         if editingStyle == .delete {
-            items.remove(at: indexPath.row)
+            list.items.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
-            
-            // Saving Data
-            saveCheckItems()
+
         }
     }
 }
@@ -119,17 +102,13 @@ extension CheckItemsViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if let cell = tableView.cellForRow(at: indexPath) as? CheckItemsViewCell {
-            let item = items[indexPath.row]
+            let item = list.items[indexPath.row]
             cell.checkIfCompleted(item)
         }
         checkSorted()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.tableView.reloadData()
         }
-        
-        // Saving Data
-        saveCheckItems()
-        
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
@@ -144,27 +123,21 @@ extension CheckItemsViewController: ItemDetailViewControllerDelegate {
     }
     
     func ItemDetailViewController(_ controller: ItemDetailViewController, didFinishAdding item: ToDoItems) {
-        let newRow = items.count
-        items.append(item)
+        let newRow = list.items.count
+        list.items.append(item)
         
         let indexPath = IndexPath(row: newRow, section: 0)
         tableView.insertRows(at: [indexPath], with: .automatic)
         tableView.reloadData()
         
-        // Saving Data
-        saveCheckItems()
-        
         navigationController?.popViewController(animated: true)
     }
     
     func ItemDetailViewController(_ controller: ItemDetailViewController, didFinishEditing item: ToDoItems) {
-        if let index = items.firstIndex(of: item) {
+        if let index = list.items.firstIndex(of: item) {
             let indexPath = IndexPath(row: index, section: 0)
             if let cell = tableView.cellForRow(at: indexPath) as? CheckItemsViewCell {
                 cell.configure(item)
-                
-                // Saving Data
-                saveCheckItems()
             }
         }
         tableView.reloadData()
@@ -181,49 +154,11 @@ extension CheckItemsViewController: ItemDetailViewControllerDelegate {
 extension CheckItemsViewController {
     
     private func checkSorted() {
-        items = items.sorted(by: {(!$0.ischecked) && ($1.ischecked)})
+        list.items = list.items.sorted(by: {(!$0.ischecked) && ($1.ischecked)})
     }
     
     private func sortedByName() {
-        items = items.sorted(by: {($0.title) < ($1.title)})
-    }
-    
-    // Document Folder Path
-    private func documentDirectory() -> URL {
-        
-        let paths = FileManager.default.urls(for: .documentDirectory,
-                                             in: .userDomainMask)
-        return paths[0]
-    }
-    
-    private func dataFilePath() -> URL {
-        return documentDirectory().appendingPathComponent("ToDoList.plist")
-    }
-    
-    // Save data to file
-    private func saveCheckItems() {
-        let encoder = PropertyListEncoder()
-        do {
-            let data = try encoder.encode(items)
-            try data.write(to: dataFilePath(),
-                           options: .atomic)
-        } catch {
-            print("Error while encoding lists \(error.localizedDescription)")
-        }
-        
-    }
-    
-    // Load data from file
-    private func loadCheckItems() {
-        let path = dataFilePath()
-        if let data = try? Data(contentsOf: path) {
-            let decoder = PropertyListDecoder()
-            do {
-                items = try decoder.decode([ToDoItems].self, from: data)
-            } catch {
-                print("Error while decoding lists \(error.localizedDescription)")
-            }
-        }
+        list.items = list.items.sorted(by: {($0.title) < ($1.title)})
     }
     
 }

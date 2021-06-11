@@ -9,9 +9,10 @@
 import Foundation
 
 
-class ToDoList: NSObject {
+class ToDoList: NSObject, Codable {
     
     var name: String = ""
+    var items: [ToDoItems] = []
     
     init(name: String) {
         self.name = name

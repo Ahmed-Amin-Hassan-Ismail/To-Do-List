@@ -11,6 +11,7 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    let dataModel = DataModel()
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -18,6 +19,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
+        
+        let navigationController = window?.rootViewController as! UINavigationController
+        let controller = navigationController.viewControllers[0] as! ToDoListViewController
+        controller.dataModel = dataModel
+        print(dataModel.dataFilePath())
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -35,6 +41,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneWillResignActive(_ scene: UIScene) {
         // Called when the scene will move from an active state to an inactive state.
         // This may occur due to temporary interruptions (ex. an incoming phone call).
+        
+        // Saving Data
+        saveData()
     }
 
     func sceneWillEnterForeground(_ scene: UIScene) {
@@ -46,8 +55,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Called as the scene transitions from the foreground to the background.
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
+        
+        // Saving Data
+        saveData()
     }
-
+    
+    
+    
+    // MARK: - Helper methods
+   private func saveData() {
+        dataModel.saveToDoList()
+    }
 
 }
 
