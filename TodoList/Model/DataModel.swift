@@ -10,10 +10,44 @@ import Foundation
 
 class DataModel {
     var lists = [ToDoList]()
+    var indexOfSelectedToDoList: Int {
+        get {
+            UserDefaults.standard.integer(forKey: "CheckItemIndex")
+        } set {
+            UserDefaults.standard.set(newValue, forKey: "CheckItemIndex")
+            UserDefaults.standard.synchronize()
+        }
+    }
     
     init() {
         loadToDoList()
+        registerDefaults()
+        handleFirstTime()
     }
+    
+    // Set default value for UserDefault
+    func registerDefaults() {
+        
+        let dictionary = ["CheckItemIndex": -1,
+                          "FirstTime": true] as [String: Any]
+        UserDefaults.standard.register(defaults: dictionary)
+    }
+    
+    // Checking for the first time run
+    func handleFirstTime() {
+        let userDefault = UserDefaults.standard
+        let firstTime = userDefault.bool(forKey: "FirstTime")
+        if firstTime {
+            let list = ToDoList(name: "List")
+            lists.append(list)
+            indexOfSelectedToDoList = 0
+            userDefault.set(false, forKey: "FirstTime")
+            userDefault.synchronize()
+        }
+    }
+    
+    
+    
     
     
     // Document Folder Path
