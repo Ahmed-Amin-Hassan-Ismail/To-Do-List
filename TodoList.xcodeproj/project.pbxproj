@@ -14,6 +14,7 @@
 		15758D14266504D100A8C865 /* CheckItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15758D13266504D100A8C865 /* CheckItemsViewController.swift */; };
 		15758D1626650F0F00A8C865 /* ToDoItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15758D1526650F0F00A8C865 /* ToDoItems.swift */; };
 		1582F5AF2666A90F003372D1 /* ItemDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1582F5AE2666A90F003372D1 /* ItemDetailViewController.swift */; };
+		159BAA5C2679018400864FD0 /* IconPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159BAA5B2679018400864FD0 /* IconPickerViewController.swift */; };
 		15CF593B26668CC300F892AD /* CheckItemsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15CF593A26668CC300F892AD /* CheckItemsViewCell.swift */; };
 		15E05756267420AB007236D2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E05755267420AB007236D2 /* SceneDelegate.swift */; };
 		15E05758267421BE007236D2 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E05757267421BE007236D2 /* DataModel.swift */; };
@@ -32,6 +33,7 @@
 		15758D13266504D100A8C865 /* CheckItemsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckItemsViewController.swift; sourceTree = "<group>"; };
 		15758D1526650F0F00A8C865 /* ToDoItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItems.swift; sourceTree = "<group>"; };
 		1582F5AE2666A90F003372D1 /* ItemDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailViewController.swift; sourceTree = "<group>"; };
+		159BAA5B2679018400864FD0 /* IconPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconPickerViewController.swift; sourceTree = "<group>"; };
 		15CF593A26668CC300F892AD /* CheckItemsViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckItemsViewCell.swift; sourceTree = "<group>"; };
 		15E05755267420AB007236D2 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		15E05757267421BE007236D2 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
@@ -96,6 +98,7 @@
 			children = (
 				15F5D789266E6115004B5D2C /* ToDoListViewController.swift */,
 				15F5D78D266E70A5004B5D2C /* ListDetailViewController.swift */,
+				159BAA5B2679018400864FD0 /* IconPickerViewController.swift */,
 				15758D13266504D100A8C865 /* CheckItemsViewController.swift */,
 				1582F5AE2666A90F003372D1 /* ItemDetailViewController.swift */,
 			);
@@ -188,6 +191,7 @@
 				15E05756267420AB007236D2 /* SceneDelegate.swift in Sources */,
 				15758CFE2664FD4A00A8C865 /* AppDelegate.swift in Sources */,
 				15F5D78C266E62D0004B5D2C /* ToDoList.swift in Sources */,
+				159BAA5C2679018400864FD0 /* IconPickerViewController.swift in Sources */,
 				15E05758267421BE007236D2 /* DataModel.swift in Sources */,
 				15758D1626650F0F00A8C865 /* ToDoItems.swift in Sources */,
 				15F5D78E266E70A5004B5D2C /* ListDetailViewController.swift in Sources */,

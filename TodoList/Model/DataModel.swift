@@ -26,7 +26,7 @@ class DataModel {
     }
     
     // Set default value for UserDefault
-    func registerDefaults() {
+    private func registerDefaults() {
         
         let dictionary = ["CheckItemIndex": -1,
                           "FirstTime": true] as [String: Any]
@@ -34,7 +34,7 @@ class DataModel {
     }
     
     // Checking for the first time run
-    func handleFirstTime() {
+    private func handleFirstTime() {
         let userDefault = UserDefaults.standard
         let firstTime = userDefault.bool(forKey: "FirstTime")
         if firstTime {
@@ -51,18 +51,18 @@ class DataModel {
     
     
     // Document Folder Path
-     func documentDirectory() -> URL {
+    private func documentDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory,
                                              in: .userDomainMask)
         return paths[0]
     }
     
-     func dataFilePath() -> URL {
+    private func dataFilePath() -> URL {
         return documentDirectory().appendingPathComponent("ToDoList.plist")
     }
     
     // save Data
-     func saveToDoList() {
+    func saveToDoList() {
         let encoder = PropertyListEncoder()
         do {
             let data = try encoder.encode(lists)
@@ -73,7 +73,7 @@ class DataModel {
     }
     
     // Load Data
-     func loadToDoList() {
+    private func loadToDoList() {
         let path = dataFilePath()
         if let data = try? Data(contentsOf: path) {
             let decoder = PropertyListDecoder()
