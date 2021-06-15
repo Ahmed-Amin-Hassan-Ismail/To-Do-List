@@ -48,6 +48,21 @@ class ToDoListViewController: UITableViewController {
         navigationController?.pushViewController(listDetailViewController, animated: true)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        
+        // Showing the last opening
+        navigationController?.delegate = self
+        let index = dataModel.indexOfSelectedToDoList
+        if index >= 0 && index < dataModel.lists.count {
+            let checkItem = dataModel.lists[index]
+            performSegue(withIdentifier: "showCheckItem", sender: checkItem)
+        }
+        
+        print("Hey i am ViewDidApear method")
+        
+    }
+    
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showCheckItem" {
@@ -105,6 +120,9 @@ extension ToDoListViewController {
 extension ToDoListViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        // Save the last segue
+        dataModel.indexOfSelectedToDoList = indexPath.row
         let list = dataModel.lists[indexPath.row]
         performSegue(withIdentifier: "showCheckItem", sender: list)
     }
@@ -142,6 +160,21 @@ extension ToDoListViewController: ListDetailViewControllerDelegate {
         tableView.reloadData()
         navigationController?.popViewController(animated: true)
     }
+}
+
+// MARK: - UINavigation Delegate
+extension ToDoListViewController: UINavigationControllerDelegate {
+    
+    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+        
+        // if the users tapped on back button
+        if viewController === self {
+            dataModel.indexOfSelectedToDoList = -1
+        }
+        
+        print("Hey i am willShow viewController method")
+    }
+    
 }
 
 // MARK: - Helper Methods
