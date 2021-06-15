@@ -23,7 +23,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let navigationController = window?.rootViewController as! UINavigationController
         let controller = navigationController.viewControllers[0] as! ToDoListViewController
         controller.dataModel = dataModel
-        print(dataModel.dataFilePath())
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

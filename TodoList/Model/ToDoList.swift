@@ -13,9 +13,17 @@ class ToDoList: NSObject, Codable {
     
     var name: String = ""
     var items: [ToDoItems] = []
+    var iconModel = "No Icon"
     
     init(name: String) {
         self.name = name
         super.init()
+    }
+    
+    // Count the unchecked items
+    func countUncheckedItems() -> Int {
+        return items.reduce(0) { (result, item) in
+            result + (item.ischecked ? 0 : 1)
+        }
     }
 }

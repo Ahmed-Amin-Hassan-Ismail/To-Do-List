@@ -10,17 +10,11 @@ import UIKit
 
 class ToDoListViewController: UITableViewController {
     
-    let cellIdentifier = "ToDoList"
     var dataModel: DataModel!
-    
     
     // MARK: - controller life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Register tableView Cell
-        tableView.register(UITableViewCell.self,
-                           forCellReuseIdentifier: cellIdentifier)
         
         // Enable large title
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -48,6 +42,11 @@ class ToDoListViewController: UITableViewController {
         navigationController?.pushViewController(listDetailViewController, animated: true)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        tableView.reloadData()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
@@ -58,9 +57,6 @@ class ToDoListViewController: UITableViewController {
             let checkItem = dataModel.lists[index]
             performSegue(withIdentifier: "showCheckItem", sender: checkItem)
         }
-        
-        print("Hey i am ViewDidApear method")
-        
     }
     
     // MARK: - Navigation
@@ -73,10 +69,6 @@ class ToDoListViewController: UITableViewController {
             controller.delegate = self
         }
     }
-    
-    
-    
-    
 }
 
 // MARK: - Table view data source
@@ -95,10 +87,22 @@ extension ToDoListViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier)!
+        let cellIdentifier = "Cell"
+        var cell: UITableViewCell!
+        
+        if let c = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) {
+            cell = c
+        } else {
+            cell = UITableViewCell(style: .subtitle, reuseIdentifier: cellIdentifier)
+        }
         
         // configure cell...
-        cell.textLabel?.text = dataModel.lists[indexPath.row].name
+        let list = dataModel.lists[indexPath.row]
+        cell.textLabel?.text = list.name
+        cell.imageView?.image = UIImage(named: list.iconModel)
+        let count = list.countUncheckedItems()
+        cell.detailTextLabel?.text =
+            (count == 0) ? "ALL Done💪🏻" : "\(count) Remaining"
         cell.accessoryType = .detailDisclosureButton
         
         return cell
@@ -171,10 +175,7 @@ extension ToDoListViewController: UINavigationControllerDelegate {
         if viewController === self {
             dataModel.indexOfSelectedToDoList = -1
         }
-        
-        print("Hey i am willShow viewController method")
     }
-    
 }
 
 // MARK: - Helper Methods

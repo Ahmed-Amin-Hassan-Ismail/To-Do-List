@@ -53,6 +53,12 @@ class ItemDetailViewController: UITableViewController {
         }
         
         
+        // Resign keyboard
+        let tapGestureRecognizer = UITapGestureRecognizer(
+            target: self.view, action: #selector(view.endEditing(_:)))
+        tapGestureRecognizer.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGestureRecognizer)
+        
         
     }
     

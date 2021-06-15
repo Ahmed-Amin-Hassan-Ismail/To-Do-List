@@ -18,9 +18,6 @@ class CheckItemsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Enable large title
-        navigationController?.navigationBar.prefersLargeTitles = true
-        
         // Hide Empty Rows
         tableView.tableFooterView = UIView()
         
@@ -41,6 +38,9 @@ class CheckItemsViewController: UITableViewController {
         
         // sorted items with task completed
         checkSorted()
+        
+        // Disable Large title 
+        navigationItem.largeTitleDisplayMode = .never
     }
     
     // MARK: - Navigation
