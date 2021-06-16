@@ -29,6 +29,7 @@ class DataModel {
     private func registerDefaults() {
         
         let dictionary = ["CheckItemIndex": -1,
+                          "CheckItemID": -1,
                           "FirstTime": true] as [String: Any]
         UserDefaults.standard.register(defaults: dictionary)
     }
@@ -46,6 +47,14 @@ class DataModel {
         }
     }
     
+    // Handling special ID for Notification
+    static func nextToDOItemID() -> Int {
+        let userDefaults = UserDefaults.standard
+        let itemID = userDefaults.integer(forKey: "CheckItemID")
+        userDefaults.set(itemID + 1, forKey: "CheckItemID")
+        userDefaults.synchronize()
+        return itemID
+    }
     
     
     
